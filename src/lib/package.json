@@ -1,0 +1,28 @@
+{
+  "name": "regulus-material",
+  "version": "0.0.1",
+  "description": "Regulus Material",
+  "main": "./regulus.umd.js",
+  "module": "./esm5/regulus.es5.js",
+  "es2015": "./esm2015/regulus.js",
+  "typings": "./regulus.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alanpinhel/regulus-material.git"
+  },
+  "keywords": [
+    "regulus",
+    "angular",
+    "material",
+    "material design"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alanpinhel/regulus-material/issues"
+  },
+  "homepage": "https://github.com/alanpinhel/regulus-material#readme",
+  "peerDependencies": {
+    "@angular/core": "^5.1.0",
+    "@angular/common": "^5.1.0"
+  }
+}
