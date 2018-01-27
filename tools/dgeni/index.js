@@ -84,30 +84,7 @@ let apiDocsPackage = new DgeniPackage('regulus-material-api-docs', dgeniPackageD
   // Entry points for docs generation. All publically exported symbols found through these
   // files will have docs generated.
   readTypeScriptModules.sourceFiles = [
-    'autocomplete/index.ts',
-    'button/index.ts',
-    'button-toggle/index.ts',
-    'card/index.ts',
-    'checkbox/index.ts',
-    'chips/index.ts',
-    'core/index.ts',
-    'dialog/index.ts',
-    'grid-list/index.ts',
-    'icon/index.ts',
-    'input/index.ts',
-    'list/index.ts',
-    'menu/index.ts',
-    'progress-bar/index.ts',
-    'progress-spinner/index.ts',
-    'radio/index.ts',
-    'select/index.ts',
-    'sidenav/index.ts',
-    'slide-toggle/index.ts',
-    'slider/index.ts',
-    'snack-bar/index.ts',
-    'tabs/index.ts',
-    'toolbar/index.ts',
-    'tooltip/index.ts',
+    'barra-progresso/index.ts'
   ];
 })
 

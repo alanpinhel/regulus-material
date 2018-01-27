@@ -53,7 +53,7 @@ task(':release:commit', () => {
   let version = JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
   return src('.')
     .pipe(git.add())
-    .pipe(git.commit('Released REGULUS-MATERIAL@' + version));
+    .pipe(git.commit('Released RegulusMaterial@' + version));
 });
 
 // release push
