@@ -1,51 +1,29 @@
-import {task, watch, src, dest} from 'gulp';
-import {ScriptTarget, ModuleKind} from 'typescript';
 import * as path from 'path';
+import { task, watch, src, dest } from 'gulp';
+import { ScriptTarget, ModuleKind } from 'typescript';
+import { distComponentsRoot, projectRoot, componentsDir, htmlMinifierOptions } from '../constants';
+import { sassBuildTask, tsBuildTask, execNodeTask, sequenceTask, triggerLivereload } from '../util/task-helpers';
 
-import {
-  DIST_COMPONENTS_ROOT, PROJECT_ROOT, COMPONENTS_DIR, HTML_MINIFIER_OPTIONS, LICENSE_BANNER
-} from '../constants';
-import {
-  sassBuildTask, tsBuildTask, execNodeTask, sequenceTask,
-  triggerLivereload
-} from '../util/task_helpers';
-
-// There are no type definitions available for these imports.
 const inlineResources = require('../../../scripts/release/inline-resources');
 const gulpRollup = require('gulp-better-rollup');
 const gulpMinifyHtml = require('gulp-htmlmin');
 const gulpIf = require('gulp-if');
+const tsconfigPath = path.join(componentsDir, 'tsconfig.json');
 
-/** Path to tsconfig file for the components. */
-const tsconfigPath = path.join(COMPONENTS_DIR, 'tsconfig.json');
-
-/** Asset files to be added to the components output. */
 const assetFiles = [
-  path.join(COMPONENTS_DIR, '**/*.html'),
-  path.join(COMPONENTS_DIR, '**/*.scss'),
-  path.join(COMPONENTS_DIR, 'package.json'),
-  path.join(PROJECT_ROOT, 'README.md'),
-  path.join(PROJECT_ROOT, 'LICENSE'),
+  path.join(componentsDir, '**/*.html'),
+  path.join(componentsDir, '**/*.scss'),
+  path.join(componentsDir, 'package.json'),
+  path.join(projectRoot, 'README.md'),
+  path.join(projectRoot, 'LICENSE'),
 ];
 
-/** Builds components to UMD bundle. */
 task('build:components', [':build:components:bundle:umd']);
 
-/** Builds components for Angular Material releases */
 task(':build:components:release', sequenceTask(
-  ':build:components:bundle:umd',
-  ':build:components:bundle:esm',
-  ':build:components:ngc'
+  ':build:components:bundle:umd', ':build:components:bundle:esm', ':build:components:ngc'
 ));
 
-/** Builds components typescript in ES5, ES6 target. For specs Karma needs CJS output. */
-task(':build:components:ts:es5', tsBuildTask(tsconfigPath, { target: ScriptTarget.ES5 }));
-task(':build:components:ts:es6', tsBuildTask(tsconfigPath, { target: ScriptTarget.ES2015 }));
-task(':build:components:ts:spec', tsBuildTask(tsconfigPath, {
-  target: ScriptTarget.ES5, module: ModuleKind.CommonJS
-}));
-
-/** Tasks to create a UMD or ES bundle */
 task(':build:components:bundle:umd', sequenceTask(
   ':build:components:ts:es5', ':build:components:inline', ':build:components:rollup:umd'
 ));
@@ -54,58 +32,58 @@ task(':build:components:bundle:esm', sequenceTask(
   ':build:components:ts:es6', ':build:components:inline', ':build:components:rollup:esm'
 ));
 
-/** Copies all component assets to the build output. */
-task(':build:components:assets', () => {
-  return src(assetFiles)
-    .pipe(gulpIf(/.html$/, gulpMinifyHtml(HTML_MINIFIER_OPTIONS)))
-    .pipe(dest(DIST_COMPONENTS_ROOT));
-});
-
-/** Compiles the components SCSS into minified CSS. */
-task(':build:components:scss', sassBuildTask(DIST_COMPONENTS_ROOT, COMPONENTS_DIR, true));
-
-/** Builds a ES6 bundle for all components. */
-task(':build:components:rollup:esm', () => {
-  return src(path.join(DIST_COMPONENTS_ROOT, 'index.js'))
-    .pipe(createRollupBundle('es', 'regulus-material.js'))
-    .pipe(dest(path.join(DIST_COMPONENTS_ROOT, 'bundles')));
-});
-
-/** Builds a UMD bundle (ES5) for all components. */
-task(':build:components:rollup:umd', () => {
-  return src(path.join(DIST_COMPONENTS_ROOT, 'index.js'))
-    .pipe(createRollupBundle('umd', 'regulus-material.umd.js'))
-    .pipe(dest(path.join(DIST_COMPONENTS_ROOT, 'bundles')));
-});
-
-
-/** Builds components with resources (html, css) inlined into the built JS. */
-task(':build:components:inline', sequenceTask(
-  [':build:components:scss', ':build:components:assets'],
-  ':inline-resources',
+task(':build:components:ts:es5', tsBuildTask(
+  tsconfigPath, { target: ScriptTarget.ES5 }
 ));
 
-/** Inlines resources (html, css) into the JS output. */
-task(':inline-resources', () => inlineResources(DIST_COMPONENTS_ROOT));
+task(':build:components:ts:es6', tsBuildTask(
+  tsconfigPath, { target: ScriptTarget.ES2015 }
+));
 
-/** Generates metadata.json files for all of the components. */
+task(':build:components:ts:spec', tsBuildTask(tsconfigPath, {
+  target: ScriptTarget.ES5, module: ModuleKind.CommonJS
+}));
+
+task(':build:components:assets', () => {
+  return src(assetFiles)
+    .pipe(gulpIf(/.html$/, gulpMinifyHtml(htmlMinifierOptions)))
+    .pipe(dest(distComponentsRoot));
+});
+
+task(':build:components:scss', sassBuildTask(
+  distComponentsRoot, componentsDir, true
+));
+
+task(':build:components:rollup:esm', () => {
+  return src(path.join(distComponentsRoot, 'index.js'))
+    .pipe(createRollupBundle('es', 'regulus-material.js'))
+    .pipe(dest(path.join(distComponentsRoot, 'bundles')));
+});
+
+task(':build:components:rollup:umd', () => {
+  return src(path.join(distComponentsRoot, 'index.js'))
+    .pipe(createRollupBundle('umd', 'regulus-material.umd.js'))
+    .pipe(dest(path.join(distComponentsRoot, 'bundles')));
+});
+
+task(':build:components:inline', sequenceTask(
+  [':build:components:scss', ':build:components:assets'], ':inline-resources'
+));
+
+task(':inline-resources', () => inlineResources(distComponentsRoot));
+
 task(':build:components:ngc', ['build:components'], execNodeTask(
   '@angular/compiler-cli', 'ngc', ['-p', tsconfigPath]
 ));
 
-/** [Watch task] Rebuilds (ESM output) whenever ts, scss, or html sources change. */
 task(':watch:components', () => {
-  watch(path.join(COMPONENTS_DIR, '**/*.ts'), ['build:components', triggerLivereload]);
-  watch(path.join(COMPONENTS_DIR, '**/*.scss'), ['build:components', triggerLivereload]);
-  watch(path.join(COMPONENTS_DIR, '**/*.html'), ['build:components', triggerLivereload]);
+  watch(path.join(componentsDir, '**/*.ts'), ['build:components', triggerLivereload]);
+  watch(path.join(componentsDir, '**/*.scss'), ['build:components', triggerLivereload]);
+  watch(path.join(componentsDir, '**/*.html'), ['build:components', triggerLivereload]);
 });
 
-const ROLLUP_GLOBALS = {
-  // Import tslib rather than having TypeScript output its helpers multiple times.
-  // See https://github.com/Microsoft/tslib
+const rollupGlobals = {
   'tslib': 'tslib',
-
-  // Angular dependencies
   '@angular/animations': 'ng.animations',
   '@angular/core': 'ng.core',
   '@angular/common': 'ng.common',
@@ -114,11 +92,7 @@ const ROLLUP_GLOBALS = {
   '@angular/platform-browser': 'ng.platformBrowser',
   '@angular/platform-browser-dynamic': 'ng.platformBrowserDynamic',
   '@angular/platform-browser/animations': 'ng.platformBrowser.animations',
-
-  // Local Angular packages inside of Material.
   'regulus-material': 'ng.regulus-material',
-
-  // Rxjs dependencies
   'rxjs/BehaviorSubject': 'Rx',
   'rxjs/Observable': 'Rx',
   'rxjs/Subject': 'Rx',
@@ -145,21 +119,19 @@ const ROLLUP_GLOBALS = {
   'rxjs/add/operator/toPromise': 'Rx.Observable.prototype',
 };
 
-/** Creates a rollup bundles of the Material components.*/
 function createRollupBundle(format: string, outFile: string) {
   let rollupOptions = {
     context: 'this',
-    external: Object.keys(ROLLUP_GLOBALS)
+    external: Object.keys(rollupGlobals)
   };
 
   let rollupGenerateOptions = {
-    // Keep the moduleId empty because we don't want to force developers to a specific moduleId.
     moduleId: '',
     moduleName: 'ng.regulus-material',
-    banner: LICENSE_BANNER,
     format: format,
+    banner: '',
     dest: outFile,
-    globals: ROLLUP_GLOBALS,
+    globals: rollupGlobals,
   };
 
   return gulpRollup(rollupOptions, rollupGenerateOptions);

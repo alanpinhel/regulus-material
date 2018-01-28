@@ -5,31 +5,31 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
-import { DEMO_APP_ROUTES } from './app/routes';
+import { demoAppRoutes } from './app/routes';
 import { App } from './app/app';
 import { Home } from './home/home';
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        HttpModule,
-        ReactiveFormsModule,
-        RouterModule.forRoot(DEMO_APP_ROUTES, { useHash: true })
-    ],
-    declarations: [
-        App,
-        Home
-    ],
-    entryComponents: [
-        App
-    ]
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    HttpModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot(demoAppRoutes, { useHash: true })
+  ],
+  declarations: [
+    App,
+    Home
+  ],
+  entryComponents: [
+    App
+  ]
 })
 export class AppModule {
-    constructor(private _appRef: ApplicationRef) { }
+  constructor(private _appRef: ApplicationRef) { }
 
-    ngDoBootstrap() {
-        this._appRef.bootstrap(App);
-    }
+  ngDoBootstrap() {
+    this._appRef.bootstrap(App);
+  }
 }

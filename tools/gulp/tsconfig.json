@@ -3,7 +3,10 @@
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es6", "es2015"],
+    "lib": [
+      "es6",
+      "es2015"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,

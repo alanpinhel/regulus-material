@@ -1,39 +1,39 @@
 {
-    "compilerOptions": {
-        "declaration": false,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "lib": [
-            "es6",
-            "es2015",
-            "dom"
-        ],
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "noEmitOnError": true,
-        "noImplicitAny": true,
-        "outDir": "../../dist/",
-        "sourceMap": true,
-        "target": "es5",
-        "stripInternal": false,
-        "baseUrl": "",
-        "typeRoots": [
-            "../../node_modules/@types/!(node)"
-        ],
-        "paths": {
-            "regulus-material": [
-                "../../dist/regulus-material"
-            ]
-        }
-    },
-    "files": [
-        "./app-module.ts",
-        "./system-config.ts",
-        "./main.ts"
+  "compilerOptions": {
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "es6",
+      "es2015",
+      "dom"
     ],
-    "angularCompilerOptions": {
-        "genDir": "../../dist",
-        "skipTemplateCodegen": true,
-        "debug": true
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "outDir": "../../dist/",
+    "sourceMap": true,
+    "target": "es5",
+    "stripInternal": false,
+    "baseUrl": "",
+    "typeRoots": [
+      "../../node_modules/@types/!(node)"
+    ],
+    "paths": {
+      "regulus-material": [
+        "../../dist/regulus-material"
+      ]
     }
+  },
+  "files": [
+    "./app-module.ts",
+    "./system-config.ts",
+    "./main.ts"
+  ],
+  "angularCompilerOptions": {
+    "genDir": "../../dist",
+    "skipTemplateCodegen": true,
+    "debug": true
+  }
 }

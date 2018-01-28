@@ -2,11 +2,10 @@ import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as gulp from 'gulp';
 import * as path from 'path';
-import {NPM_VENDOR_FILES, PROJECT_ROOT, DIST_ROOT} from '../constants';
-import {CompilerOptions} from 'typescript';
-import {compileProject} from './ts-compiler';
+import { npmVendorFiles, projectRoot, distRoot } from '../constants';
+import { CompilerOptions } from 'typescript';
+import { compileProject } from './ts-compiler';
 
-/* Those imports lack typings. */
 const gulpClean = require('gulp-clean');
 const gulpMerge = require('merge2');
 const gulpRunSequence = require('run-sequence');
@@ -15,10 +14,8 @@ const gulpSourcemaps = require('gulp-sourcemaps');
 const gulpConnect = require('gulp-connect');
 const gulpIf = require('gulp-if');
 const gulpCleanCss = require('gulp-clean-css');
-
 const resolveBin = require('resolve-bin');
 
-/** If the string passed in is a glob, returns it, otherwise append '**\/*' to it. */
 function _globify(maybeGlob: string, suffix = '**/*') {
   if (maybeGlob.indexOf('*') != -1) {
     return maybeGlob;
@@ -28,18 +25,14 @@ function _globify(maybeGlob: string, suffix = '**/*') {
     if (stat.isFile()) {
       return maybeGlob;
     }
-  } catch (e) {}
+  } catch (e) { }
   return path.join(maybeGlob, suffix);
 }
 
-
-/** Creates a task that runs the TypeScript compiler */
 export function tsBuildTask(tsConfigPath: string, extraOptions?: CompilerOptions) {
   return () => compileProject(tsConfigPath, extraOptions);
 }
 
-
-/** Create a SASS Build Task. */
 export function sassBuildTask(dest: string, root: string, minify = false) {
   return () => {
     return gulp.src(_globify(root, '**/*.scss'))
@@ -51,16 +44,11 @@ export function sassBuildTask(dest: string, root: string, minify = false) {
   };
 }
 
-
-/** Options that can be passed to execTask or execNodeTask. */
 export interface ExecTaskOptions {
-  // Whether to output to STDERR and STDOUT.
   silent?: boolean;
-  // If an error happens, this will replace the standard error.
   errMessage?: string;
 }
 
-/** Create a task that executes a binary as if from the command line. */
 export function execTask(binPath: string, args: string[], options: ExecTaskOptions = {}) {
   return (done: (err?: string) => void) => {
     const childProcess = child_process.spawn(binPath, args);
@@ -89,13 +77,8 @@ export function execTask(binPath: string, args: string[], options: ExecTaskOptio
   };
 }
 
-/**
- * Create a task that executes an NPM Bin, by resolving the binary path then executing it. These are
- * binaries that are normally in the `./node_modules/.bin` directory, but their name might differ
- * from the package. Examples are typescript, ngc and gulp itself.
- */
 export function execNodeTask(packageName: string, executable: string | string[], args?: string[],
-                             options: ExecTaskOptions = {}) {
+  options: ExecTaskOptions = {}) {
   if (!args) {
     args = <string[]>executable;
     executable = undefined;
@@ -106,17 +89,12 @@ export function execNodeTask(packageName: string, executable: string | string[],
       if (err) {
         done(err);
       } else {
-        // Execute the node binary within a new child process using spawn.
-        // The binary needs to be `node` because on Windows the shell cannot determine the correct
-        // interpreter from the shebang.
         execTask('node', [binPath].concat(args), options)(done);
       }
     });
   };
 }
 
-
-/** Copy files from a glob to a destination. */
 export function copyTask(srcGlobOrDir: string | string[], outRoot: string) {
   if (typeof srcGlobOrDir === 'string') {
     return () => gulp.src(_globify(srcGlobOrDir)).pipe(gulp.dest(outRoot));
@@ -125,14 +103,10 @@ export function copyTask(srcGlobOrDir: string | string[], outRoot: string) {
   }
 }
 
-
-/** Delete files. */
 export function cleanTask(glob: string) {
   return () => gulp.src(glob, { read: false }).pipe(gulpClean(null));
 }
 
-
-/** Build an task that depends on all application build tasks. */
 export function buildAppTask(appName: string) {
   const buildTasks = ['vendor', 'ts', 'scss', 'assets']
     .map(taskName => `:build:${appName}:${taskName}`)
@@ -148,17 +122,14 @@ export function buildAppTask(appName: string) {
   };
 }
 
-
-/** Create a task that copies vendor files in the proper destination. */
 export function vendorTask() {
   return () => gulpMerge(
-    NPM_VENDOR_FILES.map(root => {
-      const glob = path.join(PROJECT_ROOT, 'node_modules', root, '**/*.+(js|js.map)');
-      return gulp.src(glob).pipe(gulp.dest(path.join(DIST_ROOT, 'libs', root)));
+    npmVendorFiles.map(root => {
+      const glob = path.join(projectRoot, 'node_modules', root, '**/*.+(js|js.map)');
+      return gulp.src(glob).pipe(gulp.dest(path.join(distRoot, 'libs', root)));
     }));
 }
 
-/** Create a task that serves the dist folder. */
 export function serverTask(livereload = true) {
   return () => {
     gulpConnect.server({
@@ -170,13 +141,10 @@ export function serverTask(livereload = true) {
   };
 }
 
-/** Triggers a reload when livereload is enabled and a gulp-connect server is running. */
 export function triggerLivereload() {
   gulp.src('dist').pipe(gulpConnect.reload());
 }
 
-
-/** Create a task that's a sequence of other tasks. */
 export function sequenceTask(...args: any[]) {
   return (done: any) => {
     gulpRunSequence(
