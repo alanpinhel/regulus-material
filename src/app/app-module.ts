@@ -5,8 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
-import { DEMO_APP_ROUTES } from './demo-app/routes';
-import { DemoApp } from './demo-app/demo-app';
+import { DEMO_APP_ROUTES } from './app/routes';
+import { App } from './app/app';
 import { Home } from './home/home';
 
 @NgModule({
@@ -19,17 +19,17 @@ import { Home } from './home/home';
         RouterModule.forRoot(DEMO_APP_ROUTES, { useHash: true })
     ],
     declarations: [
-        DemoApp,
+        App,
         Home
     ],
     entryComponents: [
-        DemoApp
+        App
     ]
 })
-export class DemoAppModule {
+export class AppModule {
     constructor(private _appRef: ApplicationRef) { }
 
     ngDoBootstrap() {
-        this._appRef.bootstrap(DemoApp);
+        this._appRef.bootstrap(App);
     }
 }

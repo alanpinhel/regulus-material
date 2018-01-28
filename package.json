@@ -10,15 +10,7 @@
   },
   "scripts": {
     "build": "gulp build:components",
-    "demo-app": "gulp serve:devapp",
-    "test": "gulp test",
-    "tslint": "gulp lint",
-    "stylelint": "gulp lint",
-    "e2e": "gulp e2e",
-    "deploy": "gulp deploy",
-    "webdriver-manager": "webdriver-manager",
-    "docs": "gulp docs",
-    "api": "gulp api-docs"
+    "app": "gulp serve:devapp"
   },
   "license": "MIT",
   "engines": {

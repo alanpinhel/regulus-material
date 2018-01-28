@@ -27,7 +27,7 @@
         }
     },
     "files": [
-        "./demo-app-module.ts",
+        "./app-module.ts",
         "./system-config.ts",
         "./main.ts"
     ],
