@@ -1,6 +1,6 @@
 {
   "name": "regulus-material",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Regulus Material",
   "main": "./regulus.umd.js",
   "module": "./esm5/regulus.es5.js",
