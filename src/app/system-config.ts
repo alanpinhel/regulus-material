@@ -7,7 +7,6 @@ System.config({
     '@angular/core': 'libs/@angular/core/bundles/core.umd.js',
     '@angular/common': 'libs/@angular/common/bundles/common.umd.js',
     '@angular/compiler': 'libs/@angular/compiler/bundles/compiler.umd.js',
-    '@angular/http': 'libs/@angular/http/bundles/http.umd.js',
     '@angular/forms': 'libs/@angular/forms/bundles/forms.umd.js',
     '@angular/router': 'libs/@angular/router/bundles/router.umd.js',
     '@angular/animations': 'libs/@angular/animations/bundles/animations.umd.js',

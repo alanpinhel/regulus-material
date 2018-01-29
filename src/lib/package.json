@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/alanpinhel/regulus-material#readme",
   "peerDependencies": {
-    "@angular/core": "^5.1.0",
-    "@angular/common": "^5.1.0"
+    "@angular/core": "^5.1.1",
+    "@angular/common": "^5.1.1"
   }
 }

@@ -2,7 +2,6 @@ import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { demoAppRoutes } from './app/routes';
@@ -14,7 +13,6 @@ import { Home } from './home/home';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    HttpModule,
     ReactiveFormsModule,
     RouterModule.forRoot(demoAppRoutes, { useHash: true })
   ],
