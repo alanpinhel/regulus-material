@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 
-import { RmBarraProgresso } from './barra-progresso/index';
+import { RmBarraProgressoModule } from './barra-progresso/index';
 
 @NgModule({
-  imports: [RmBarraProgresso],
-  exports: [RmBarraProgresso]
+  imports: [RmBarraProgressoModule],
+  exports: [RmBarraProgressoModule]
 })
 export class RmModule { }

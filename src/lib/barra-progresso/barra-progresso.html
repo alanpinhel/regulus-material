@@ -1,1 +1,7 @@
-<p>barra de progresso</p>
+<div [ngClass]="{
+  'sucesso' : classe == 'sucesso',
+  'pendente' : classe == 'pendente'
+}">
+  <p>{{ valor }}%</p>
+  <span [ngStyle]="{'width': valor + '%'}"></span>
+</div>

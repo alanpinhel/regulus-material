@@ -8,6 +8,6 @@ export * from './barra-progresso';
 @NgModule({
   imports: [CommonModule],
   exports: [RmBarraProgresso],
-  declarations: [RmBarraProgresso],
+  declarations: [RmBarraProgresso]
 })
 export class RmBarraProgressoModule { }

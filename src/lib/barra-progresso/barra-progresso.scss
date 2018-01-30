@@ -1,0 +1,33 @@
+div {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 1em;
+  background-color: #EEEEEE;
+}
+
+span {
+  height: 1em;
+}
+
+p {
+  position: absolute;
+  font-family: sans-serif;
+  text-align: center;
+  font-size: .6rem;
+  color: rgba(0, 0, 0, .87);
+  width: 100%;
+  margin: 0;
+}
+
+.sucesso span {
+  background-color: #7DB249;
+}
+
+.sucesso p {
+  color: rgba(255, 255, 255, .87);
+}
+
+.pendente span {
+  background-color: #FDC02F;
+}

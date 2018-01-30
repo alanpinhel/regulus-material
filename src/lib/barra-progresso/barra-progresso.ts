@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   moduleId: module.id,
   selector: 'rm-barra-progresso',
   templateUrl: './barra-progresso.html',
-  styleUrls: ['./barra-progresso.css']
+  styleUrls: ['./barra-progresso.scss']
 })
-export class RmBarraProgresso { }
+export class RmBarraProgresso {
+  @Input() valor: number;
+  @Input() classe: string;
+}

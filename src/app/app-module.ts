@@ -4,9 +4,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { demoAppRoutes } from './app/routes';
+import { RmModule } from 'regulus-material';
+
+import { appRoutes } from './app/routes';
 import { App } from './app/app';
 import { Home } from './home/home';
+import { BarraProgresso } from './barra-progresso/barra-progresso';
 
 @NgModule({
   imports: [
@@ -14,11 +17,13 @@ import { Home } from './home/home';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(demoAppRoutes, { useHash: true })
+    RouterModule.forRoot(appRoutes, { useHash: true }),
+    RmModule
   ],
   declarations: [
     App,
-    Home
+    Home,
+    BarraProgresso
   ],
   entryComponents: [
     App
