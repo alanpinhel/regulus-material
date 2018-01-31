@@ -10,6 +10,7 @@ import { appRoutes } from './app/routes';
 import { App } from './app/app';
 import { Home } from './home/home';
 import { BarraProgresso } from './barra-progresso/barra-progresso';
+import { Tabela } from './tabela/tabela';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { BarraProgresso } from './barra-progresso/barra-progresso';
   declarations: [
     App,
     Home,
-    BarraProgresso
+    BarraProgresso,
+    Tabela
   ],
   entryComponents: [
     App
